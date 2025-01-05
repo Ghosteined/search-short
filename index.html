@@ -65,23 +65,33 @@
 
     <script>
         function sendRequest() {
-            // Replace this URL with your Flask server URL
-            const url = 'https://4b8f-86-209-125-167.ngrok-free.app/ping';
+			const url = 'https://5b05-86-209-125-167.ngrok-free.app/ping';
+			const requestData = {
+				message: 'Hello, server!'
+			};
 
-            fetch(url, {
-                method: 'POST', // or 'POST' if your server expects POST
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('responseMessage').textContent = 'Request sent successfully!';
-            })
-            .catch(error => {
-                document.getElementById('responseMessage').textContent = 'Error sending request: ' + error.message;
-            });
-        }
+			fetch(url, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(requestData),
+			})
+			.then(response => response.text())  // Use .text() to get the raw response
+			.then(data => {
+				console.log(data);  // Log the response to check the raw output
+				try {
+					const jsonData = JSON.parse(data);  // Try parsing the JSON response
+					document.getElementById('responseMessage').textContent = 'Request sent successfully!';
+				} catch (error) {
+					document.getElementById('responseMessage').textContent = 'Error: Invalid JSON response.';
+				}
+			})
+			.catch(error => {
+				document.getElementById('responseMessage').textContent = 'Error sending request: ' + error.message;
+			});
+		}
+
     </script>
 </body>
 </html>
