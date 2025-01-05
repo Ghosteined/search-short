@@ -65,7 +65,7 @@
 
     <script>
         function sendRequest() {
-			const url = 'https://5b05-86-209-125-167.ngrok-free.app/ping';
+			const url = 'https://positive-seahorse-fully.ngrok-free.app/ping';
 			const requestData = {
 				message: 'Hello, server!'
 			};
@@ -76,21 +76,23 @@
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify(requestData),
+				mode: 'cors'  // Enable CORS
 			})
-			.then(response => response.text())  // Use .text() to get the raw response
-			.then(data => {
-				console.log(data);  // Log the response to check the raw output
-				try {
-					const jsonData = JSON.parse(data);  // Try parsing the JSON response
+
+			.then(response => {
+				// For no-cors, you won't be able to access the response body directly
+				console.log(response);  // You can only inspect the response status and headers
+				if (response.ok) {
 					document.getElementById('responseMessage').textContent = 'Request sent successfully!';
-				} catch (error) {
-					document.getElementById('responseMessage').textContent = 'Error: Invalid JSON response.';
+				} else {
+					document.getElementById('responseMessage').textContent = 'Error: Request failed.';
 				}
 			})
 			.catch(error => {
 				document.getElementById('responseMessage').textContent = 'Error sending request: ' + error.message;
 			});
 		}
+
 
     </script>
 </body>
