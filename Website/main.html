@@ -65,35 +65,38 @@
 
     <script>
         function sendRequest() {
-			const url = 'https://positive-seahorse-fully.ngrok-free.app/ping';
-			const requestData = {
-				message: 'Hello, server!'
-			};
+            const url = 'https://positive-seahorse-fully.ngrok-free.app/ping';
+            const requestData = {
+                message: 'Hello, server!'
+            };
 
-			fetch(url, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(requestData),
-				mode: 'cors'  // Enable CORS
-			})
-
-			.then(response => {
-				// For no-cors, you won't be able to access the response body directly
-				console.log(response);  // You can only inspect the response status and headers
-				if (response.ok) {
-					document.getElementById('responseMessage').textContent = 'Request sent successfully!';
-				} else {
-					document.getElementById('responseMessage').textContent = 'Error: Request failed.';
-				}
-			})
-			.catch(error => {
-				document.getElementById('responseMessage').textContent = 'Error sending request: ' + error.message;
-			});
-		}
-
-
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+                mode: 'cors'  // Enable CORS
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();  // Parse the response body as JSON
+                } else {
+                    throw new Error('Request failed with status ' + response.status);
+                }
+            })
+            .then(data => {
+                // Check the response content
+                if (data.response === 'pong') {
+                    document.getElementById('responseMessage').textContent = 'Response: ' + data.response;
+                } else {
+                    document.getElementById('responseMessage').textContent = 'Unexpected response: ' + data.response;
+                }
+            })
+            .catch(error => {
+                document.getElementById('responseMessage').textContent = 'Error sending request: ' + error.message;
+            });
+        }
     </script>
 </body>
 </html>
